@@ -22,14 +22,16 @@ jobs:
     steps:
       - name: Fetch and verify the N5 course
         env:
-          COURSE_URL: https://n5-30-day-study.zhoujinhangz.chatgpt.site/n5-pages.zip
-          COURSE_SHA: 54261e6fe1d67c7d73d172322e51662283cc9583d6447c301a152bbd1c9ac895
+          COURSE_URL: https://n5-30-day-study.zhoujinhangz.chatgpt.site/n5-pages-v2.zip
+          COURSE_SHA: 38b2b05a83deeb6619665445f707887cb3fd80cae76658125ea59b5f0f16d24e
         run: |
-          curl --fail --show-error --silent --location --retry 2 --max-time 30 --output n5-pages.zip "$COURSE_URL"
+          curl --fail --show-error --silent --location --retry 2 --max-time 90 --output n5-pages.zip "$COURSE_URL"
           printf '%s  n5-pages.zip\n' "$COURSE_SHA" | sha256sum --check
           unzip -q n5-pages.zip -d _site
           test -s _site/index.html
           test -s _site/plan.xlsx
+          test -s _site/audio/l01-b-01.mp3
+          test -s _site/audio/l24-dialogue.mp3
           test "$(find _site -maxdepth 1 -name 'Day*.zip' | wc -l)" -eq 30
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
